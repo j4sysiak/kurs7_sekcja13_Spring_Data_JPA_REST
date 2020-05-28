@@ -3,6 +3,8 @@ package pl.jaceksysiak.hibernate.demo;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.Test;
@@ -51,5 +53,27 @@ public class CourseSpringDataRepositoryTest {
 		
 	//	logger.info("Courses -> {} ", repository.findAll());
 	//	logger.info("Count -> {} ", repository.count());
+	}
+	
+	@Test
+	public void sort() {
+		List<String> properties = new ArrayList<String>();
+		properties.add("name");
+		
+		//Sort sort = new Sort(Sort.Direction.ASC, properties);
+		//logger.info("Sorted Courses -> {} ", repository.findAll(sort));
+		//Courses -> [Course[JPA in 50 Steps], Course[Spring in 50 Steps], Course[Spring Boot in 100 Steps]] 
+	}
+	
+	
+	@Test
+	public void pagination() {
+		PageRequest pageRequest = PageRequest.of(0, 3);
+		Page<Course> firstPage = repository.findAll(pageRequest);
+		logger.info("First Page -> {} ", firstPage.getContent());
+		
+		Pageable secondPageable = firstPage.nextPageable();
+		Page<Course> secondPage = repository.findAll(secondPageable);
+		logger.info("Second Page -> {} ", secondPage.getContent());
 	}
 }
