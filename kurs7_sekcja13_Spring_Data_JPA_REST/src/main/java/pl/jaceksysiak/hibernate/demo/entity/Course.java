@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,6 +18,8 @@ import javax.persistence.OneToMany;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @NamedQueries(
 		value = {
@@ -24,6 +27,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 				@NamedQuery(name="query_get_100_courses", query="Select  c  From Course c where name like '%100 Steps'")	
 		}
 		)
+
+@Cacheable
 public class Course {
 
 	@Id
@@ -41,6 +46,7 @@ public class Course {
 	@ManyToMany(mappedBy="courses")  
 	//student is the owning side of the relation between STUDENT and COURSES
 	//dzięki temu 'mappedBy' nie bedzie dwóch tabel join pomiędzy Course i Student (STUDENT_COURSES)
+	@JsonIgnore
 	private List<Student> students = new ArrayList<>();
 	
 	@UpdateTimestamp

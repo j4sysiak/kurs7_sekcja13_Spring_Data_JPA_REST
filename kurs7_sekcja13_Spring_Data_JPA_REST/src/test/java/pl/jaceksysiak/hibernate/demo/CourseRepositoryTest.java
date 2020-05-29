@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
+//import javax.transaction.Transactional;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,6 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import pl.jaceksysiak.hibernate.demo.entity.Course;
 import pl.jaceksysiak.hibernate.demo.entity.Review;
 import pl.jaceksysiak.hibernate.demo.repository.CourseRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes=DemoApplication.class)
@@ -37,6 +38,22 @@ public class CourseRepositoryTest {
 		Course course = repository.findById(10001L);
 		assertEquals("JPA in 50 Steps", course.getName());
 		System.out.println("Testing finish.");
+	}
+	
+	@Test
+	@Transactional
+	public void FindById_FirstLevelCache() {
+		System.out.println("(FirstLevelCache) Testing is running ...");
+		
+		Course course1 = repository.findById(10001L);
+		logger.info("Course 100001 retrived");
+		
+		Course course2 = repository.findById(10001L);
+		logger.info("Course 100001 retrived again");
+		
+		assertEquals("JPA in 50 Steps", course1.getName());
+		assertEquals("JPA in 50 Steps", course2.getName());
+		System.out.println("(FirstLevelCache) Testing finish.");
 	}
 	
 	@Test
